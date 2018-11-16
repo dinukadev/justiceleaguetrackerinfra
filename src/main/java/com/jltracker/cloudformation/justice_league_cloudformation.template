@@ -1,0 +1,50 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "AWS CloudFormation for the Justice Leage Tracker System",
+  "Parameters" : {
+  	"VPCCidrRange":{
+      "Type" : "String",
+      "MinLength"   : "9",
+      "MaxLength"   : "18",	
+      "Default"     : "10.0.0.0/16",
+      "Description" : "The CIDR range for the VPC",
+      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription" : "must be a valid IP CIDR range of the form x.x.x.x/x."
+   }
+   
+  },
+  "Resources" : { 
+    "VPC":{
+      "Type" : "AWS::EC2::VPC",
+      "Properties" : {
+        "CidrBlock" : {
+          "Ref": "VPCCidrRange"
+        },
+        "Tags" : [
+          {
+            "Key" : "System",
+            "Value" : "JL Tracker System"
+          }
+        ]
+      },
+      "Description" : "The VPC for the JL Tracker System"
+    },
+    "Subnet": {
+      "Type" : "AWS::EC2::Subnet",
+      "Properties" : {
+        "CidrBlock" : "10.0.1.0/24",
+        "VpcId" : {
+          "Ref": "VPC"
+        },
+        "AvailabilityZone" : {
+          "Fn::Select":[
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

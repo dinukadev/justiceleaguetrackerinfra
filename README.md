@@ -1,0 +1,1 @@
+This project contains the cloudformation templates for building the infrastructure needed for the justice league tracker system
